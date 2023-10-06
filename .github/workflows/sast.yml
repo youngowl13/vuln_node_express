@@ -18,17 +18,21 @@ jobs:
         with:
           node-version: 16
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python2
+
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install --legacy-peer-deps
 
       - name: Run ESLint and generate report
         id: eslint
         run: |
           mkdir -p eslint-reports
-          eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
+          npx eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
           echo "eslint_report=eslint-reports/eslint-report.txt" >> $GITHUB_ENV
-          ls -la
-          pwd
 
       - name: Upload ESLint report
         uses: actions/upload-artifact@v2
