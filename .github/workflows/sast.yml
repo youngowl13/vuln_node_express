@@ -32,6 +32,7 @@ jobs:
       - name: Create ESLint configuration
         run: |
           npm init @eslint/config
+          ls
 
       - name: Customize ESLint rules (Optional)
         run: |
@@ -45,6 +46,8 @@ jobs:
           mkdir -p eslint-reports
           npx eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
           echo "eslint_report=eslint-reports/eslint-report.txt" >> $GITHUB_ENV
+          ls -la
+          pwd
 
       - name: Upload ESLint report
         uses: actions/upload-artifact@v2
