@@ -12,11 +12,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install nodejs npm
+          sudo apt-get install -y build-essential python2
+          sudo apt-get install -y libsqlite3-dev
+
       - name: Install ESLint dependencies
         run: npm install
-
-      - name: Fix node-gyp module
-        run: npm rebuild node-gyp
 
       - name: Run ESLint
         run: eslint . --ext .js,.jsx,.ts,.tsx
