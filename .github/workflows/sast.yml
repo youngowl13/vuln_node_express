@@ -1,32 +1,11 @@
-name: ESLint for SAST
-on:
-  push:
-    branches:
-      - main
-
+name: sast
+on: push
 jobs:
-  eslint:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt install nodejs npm
-          npm install eslint --global
-          sudo apt-get install -y build-essential python2
-          sudo apt-get install -y libsqlite3-dev
-
-        
-      
-
-      - name: Run ESLint
-        run: |
-              npm init @eslint/config
-              npm install eslint-plugin-security
-              eslint . --ext .js,.jsx,.ts,.tsx --plugin security          
-
-      - name: Display ESLint results
-        run: echo "ESLint results:" && cat eslint-output.txt
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn
+    - name: Run ESLint
+      run: eslint . --ext .js,.jsx,.ts,.tsx
