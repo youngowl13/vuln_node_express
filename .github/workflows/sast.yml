@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Install dependencies
         run: npm install
@@ -26,7 +26,9 @@ jobs:
         run: |
           mkdir -p eslint-reports
           eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
-          echo "::set-output name=eslint_report::eslint-reports/eslint-report.txt"
+          echo "eslint_report=eslint-reports/eslint-report.txt" >> $GITHUB_ENV
+          ls -la
+          pwd
 
       - name: Upload ESLint report
         uses: actions/upload-artifact@v2
@@ -45,5 +47,4 @@ jobs:
           name: eslint-reports
 
       - name: Display ESLint results as table
-        run: cat eslint-reports/eslint-report.txt
-
+        run: cat ${{ env.ESLINT_REPORT }}
