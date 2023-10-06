@@ -29,6 +29,16 @@ jobs:
           export SQLITE3_BINARY=npm
           npm install --legacy-peer-deps
 
+      - name: Create ESLint configuration
+        run: |
+          npm init @eslint/config
+
+      - name: Customize ESLint rules (Optional)
+        run: |
+          # Customize ESLint rules as needed in your .eslintrc.js file
+          # For example:
+          # echo "module.exports = { extends: 'eslint:recommended', rules: { 'no-console': 'off' } };" > .eslintrc.js
+
       - name: Run ESLint and generate report
         id: eslint
         run: |
