@@ -1,5 +1,4 @@
 name: ESLint for SAST
-
 on:
   push:
     branches:
