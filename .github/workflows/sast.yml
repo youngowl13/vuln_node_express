@@ -16,6 +16,7 @@ jobs:
           sudo apt-get update
           sudo apt install nodejs npm
           npm install eslint --global
+          npm install eslint-config-standard
           sudo apt-get install -y build-essential python2
           sudo apt-get install -y libsqlite3-dev
 
