@@ -18,8 +18,7 @@ jobs:
           sudo apt-get install -y build-essential python2
           sudo apt-get install -y libsqlite3-dev
 
-      - name: Install ESLint dependencies
-        run: npm install
+      
 
       - name: Run ESLint
         run: eslint . --ext .js,.jsx,.ts,.tsx
