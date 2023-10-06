@@ -22,7 +22,10 @@ jobs:
       
 
       - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+        run: |
+              npm init @eslint/config
+              eslint . --ext .js,.jsx,.ts,.tsx
+              
 
       - name: Display ESLint results
         run: echo "ESLint results:" && cat eslint-output.txt
