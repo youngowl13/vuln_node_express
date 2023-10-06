@@ -1,4 +1,4 @@
-name: ESLint SAST
+name: ESLint for SAST
 
 on:
   push:
@@ -6,64 +6,17 @@ on:
       - main
 
 jobs:
-  eslint-sast:
+  eslint:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14 # You can try using Node.js 14
+      - name: Install ESLint dependencies
+        run: npm install
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential python2
-          sudo apt-get install -y libsqlite3-dev
+      - name: Run ESLint
+        run: eslint --fix-dry-run . --ext .js,.jsx,.ts,.tsx
 
-      - name: Install dependencies
-        run: |
-          export SQLITE3_BINARY=npm
-          npm install --legacy-peer-deps
-
-      - name: Create ESLint configuration
-        run: |
-          npm init @eslint/config
-          ls
-
-      - name: Customize ESLint rules (Optional)
-        run: |
-          # Customize ESLint rules as needed in your .eslintrc.js file
-          # For example:
-          # echo "module.exports = { extends: 'eslint:recommended', rules: { 'no-console': 'off' } };" > .eslintrc.js
-
-      - name: Run ESLint and generate report
-        id: eslint
-        run: |
-          mkdir -p eslint-reports
-          npx eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
-          echo "eslint_report=eslint-reports/eslint-report.txt" >> $GITHUB_ENV
-          ls -la
-          pwd
-
-      - name: Upload ESLint report
-        uses: actions/upload-artifact@v2
-        with:
-          name: eslint-reports
-          path: eslint-reports
-
-  display-results:
-    runs-on: ubuntu-latest
-    needs: eslint-sast
-
-    steps:
-      - name: Download ESLint report
-        uses: actions/download-artifact@v2
-        with:
-          name: eslint-reports
-
-      - name: Display ESLint results as table
-        run: cat ${{ env.ESLINT_REPORT }}
+      - name: Display ESLint results
+        run: echo "ESLint suggestions:" && cat eslint-output.txt
