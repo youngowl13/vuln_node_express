@@ -1,0 +1,49 @@
+name: ESLint SAST
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  eslint-sast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint and generate report
+        id: eslint
+        run: |
+          mkdir -p eslint-reports
+          eslint . --format=table --output-file=eslint-reports/eslint-report.txt || true
+          echo "::set-output name=eslint_report::eslint-reports/eslint-report.txt"
+
+      - name: Upload ESLint report
+        uses: actions/upload-artifact@v2
+        with:
+          name: eslint-reports
+          path: eslint-reports
+
+  display-results:
+    runs-on: ubuntu-latest
+    needs: eslint-sast
+
+    steps:
+      - name: Download ESLint report
+        uses: actions/download-artifact@v2
+        with:
+          name: eslint-reports
+
+      - name: Display ESLint results as table
+        run: cat eslint-reports/eslint-report.txt
+
